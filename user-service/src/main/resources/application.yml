@@ -1,0 +1,34 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_test?serverTimezone=GMT%2B8&&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: 192.168.253.129 #我的虚拟机ip
+    port: 5672
+    username: guest #默认
+    password: guest #默认
+    publisher-confirm-type: correlated # 确认消息已发送到交换机
+    publisher-returns: true # 确认消息已发送到队列
+
+
+logging:
+  #  config: src/main/resources/logback.xml
+  level:
+    cn.itcast.user.mapper.UserMapper: debug
+
+mybatis:
+  type-aliases-package: cn.itcast.user.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mapper/**/**.xml
+
+eureka:
+  client:
+    service-url:  # eureka的地址信息
+      defaultZone: http://localhost:7001/eureka/,http://localhost:7002/eureka/

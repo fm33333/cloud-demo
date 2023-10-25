@@ -1,0 +1,19 @@
+server:
+  port: 7001 # 服务端口
+
+spring:
+  application:
+    name: eureka-server1
+
+eureka:
+
+  instance:
+    hostname: registry1
+
+  client:
+    #不向注册中心注册自己，因为自己就是注册中心
+    register-with-eureka: false
+    #不需要去检索服务，因为客户端都向自己注册服务
+    fetch-registry: false
+    service-url:  # eureka的地址信息
+      defaultZone: http://registry2:7002/eureka/
