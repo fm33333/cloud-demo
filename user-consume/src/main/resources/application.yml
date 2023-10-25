@@ -7,7 +7,7 @@ spring:
     host: smtp.qq.com #邮件服务器地址
     port: 465 #端口号
     username: 1487792164@qq.com
-    password: ieyntpbagikhbahb
+    password: # 你的授权码
     default-encoding: UTF-8 #默认编码格式
     properties:
       mail:
