@@ -25,6 +25,7 @@ public class MessageController {
     @PostMapping("/send")
     public String send() {
         // 1. 获取access_token
+        // TODO: 缓存access_token
         String url = WeChatAPIConstant.GET_ACCESS_TOKEN_URL;
         Map<String, Object> params = new HashMap<>();
         params.put(WeChatAPIConstant.CORP_ID, corpid);
@@ -33,6 +34,7 @@ public class MessageController {
         log.info("MessageController|send|accessTokenDTO: {}", accessTokenDTO.toString());
 
         // 2. 构造消息体
+
 
         // 3. 发送消息
 

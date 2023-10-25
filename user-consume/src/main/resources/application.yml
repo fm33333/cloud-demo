@@ -29,5 +29,6 @@ eureka:
 server.name: user-service
 
 corp:
+  agentid: 1000002
   corpid: ww475076ea132157f1
   corpsecret: jhGMY5CLGhJ_bjJ-hsoK5QOSMPujYtG18I23mEJbOT4

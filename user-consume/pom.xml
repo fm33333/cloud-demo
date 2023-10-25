@@ -56,6 +56,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+        <!--caffeine依赖-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+        <!--weixin sdk-->
+        <!--<dependency>
+            <groupId></groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+        </dependency>-->
 
     </dependencies>
 </project>
