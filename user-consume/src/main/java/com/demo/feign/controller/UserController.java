@@ -2,13 +2,10 @@ package com.demo.feign.controller;
 
 
 import com.demo.feign.clients.UserClient;
-import com.demo.feign.config.CaffeineCacheConfig;
 import com.demo.feign.config.DynamicFeignClientFactory;
 import com.demo.feign.data.User;
 import com.demo.feign.data.UserDTO;
-import com.demo.feign.enumeration.CacheNameEnum;
 import com.demo.feign.utils.CacheUtil;
-import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

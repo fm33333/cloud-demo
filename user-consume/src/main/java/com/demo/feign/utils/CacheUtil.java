@@ -1,9 +1,9 @@
 package com.demo.feign.utils;
 
 import com.demo.feign.clients.UserClient;
-import com.demo.feign.config.CaffeineCacheConfig;
+import com.demo.feign.cache.CaffeineCacheConfig;
 import com.demo.feign.config.DynamicFeignClientFactory;
-import com.demo.feign.enumeration.CacheNameEnum;
+import com.demo.feign.cache.CacheNameEnum;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 

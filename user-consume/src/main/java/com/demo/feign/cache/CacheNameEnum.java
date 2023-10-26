@@ -6,9 +6,16 @@ package com.demo.feign.cache;
 public enum CacheNameEnum {
 
     /**
-     * 微信凭证
+     * 客戶端
      */
-    ACCESS_TOKEN(10, 20L, 60 * 60 * 2L);
+    USER_CLIENT(10, 20L, 60 * 60L),
+
+    /**
+     * 企微应用凭证
+     */
+    ACCESS_TOKEN(10, 20L, 60 * 60 * 2L),
+
+    ;
 
     /**
      * 初始化容量
@@ -21,7 +28,7 @@ public enum CacheNameEnum {
     private final Long maximumSize;
 
     /**
-     * 过期时间（秒）
+     * 过期时间 秒
      */
     private final Long expire;
 
@@ -31,12 +38,12 @@ public enum CacheNameEnum {
         this.expire = expire;
     }
 
-    public Integer getInitialCapacity() {
-        return initialCapacity;
-    }
-
     public Long getMaximumSize() {
         return maximumSize;
+    }
+
+    public Integer getInitialCapacity() {
+        return initialCapacity;
     }
 
     public Long getExpire() {
