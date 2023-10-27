@@ -1,4 +1,4 @@
-package com.demo.feign.data;
+package com.demo.feign.data.corp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

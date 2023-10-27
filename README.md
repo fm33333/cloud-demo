@@ -43,7 +43,7 @@ eureka注册中心2
    }
    ```
 
-    http://localhost:8080/login 
+   http://localhost:8080/login
 
    请求参数：
 
@@ -53,3 +53,11 @@ eureka注册中心2
        "password": "asd"
    }
    ```
+
+## 其他
+
+1. 整合rabbitmq，user-service生产、user-consume消费
+
+2. 实现发送邮件功能
+
+3. 测试推送消息至企业微信

@@ -23,12 +23,19 @@ spring:
 
 eureka:
   client:
-    service-url:  # eureka的地址信息
+    service-url: # eureka的地址信息
       defaultZone: http://localhost:7001/eureka/,http://localhost:7002/eureka/
 
 server.name: user-service
 
+# 企业微信相关配置
 corp:
-  agentid: 1000002
-  corpid: ww475076ea132157f1
+  agentid: 1000002 # 应用id
+  corpid: ww475076ea132157f1 # 企业id
   corpsecret: jhGMY5CLGhJ_bjJ-hsoK5QOSMPujYtG18I23mEJbOT4
+# 公众号相关配置
+official:
+  appid: wx5f90bc26f7df49eb
+  appsecret: c33010bc52895da1b5269da4cc44800c
+  token: 12345abcde # 公众号服务器配置中自己设置的token
+  aesKey: Ov7YRpeMh5oIBdpmVg0KtPgnjBvxsnv9vlK359H7pDA # 公众号服务器配置中随机生成的aesKey
