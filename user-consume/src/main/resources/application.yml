@@ -35,7 +35,12 @@ corp:
   corpsecret: jhGMY5CLGhJ_bjJ-hsoK5QOSMPujYtG18I23mEJbOT4
 # 公众号相关配置
 official:
-  appid: wx5f90bc26f7df49eb
-  appsecret: c33010bc52895da1b5269da4cc44800c
+  # appid: wx5f90bc26f7df49eb
+  # appsecret: c33010bc52895da1b5269da4cc44800c
+  # 测试号（拥有所有权限）
+  appid: wxc66756df3d1be30b
+  appsecret: c45139742f0c777cfca78d08099d2a71
   token: 12345abcde # 公众号服务器配置中自己设置的token
   aesKey: Ov7YRpeMh5oIBdpmVg0KtPgnjBvxsnv9vlK359H7pDA # 公众号服务器配置中随机生成的aesKey
+  template_id_01: aP7rBEoXlY6ccSBW2zhYqBy1RWRHiB4mJcAka9mqKJQ
+  template_id_02: 71Bwl8bAezYhDePxtgZ9vx21Y9H_wsSEW7ZsLS2DzuM # 模板消息id

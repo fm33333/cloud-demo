@@ -10,9 +10,13 @@ import com.demo.feign.utils.HttpUtil;
 import com.demo.feign.utils.XmlUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletInputStream;
@@ -21,9 +25,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * 微信 服务
+ * TODO：修改发送请求，调用依赖包中的方法即可
+ */
 @Slf4j
 @Service
 public class WechatServiceImpl implements WechatService {
@@ -31,6 +41,8 @@ public class WechatServiceImpl implements WechatService {
 
     @Autowired
     private WxMpService wxMpService;
+    @Value("${official.template_id_01}")
+    private String templateId_01;
 
     @Override
     public String getAccessToken() {
@@ -101,6 +113,26 @@ public class WechatServiceImpl implements WechatService {
         textMessage.setContent("[自动回复]\n你好！欢迎你！！！\n\n这里是 【这不是fming】 公众号！");
         log.info("---封装完毕---textMessage: {}", textMessage);
         return XmlUtil.getXmlString(textMessage);
+    }
+
+    /**
+     * 推送模板消息
+     */
+    @Override
+    public void sendTemplateMessage() throws WxErrorException {
+
+        // 构建消息体
+        List<WxMpTemplateData> dataList = new ArrayList<>();
+        dataList.add(new WxMpTemplateData("name", "fmh")); // name为模板中{{name.DATA}}的name
+
+        WxMpTemplateMessage wxMpTemplateMessage = new WxMpTemplateMessage();
+        wxMpTemplateMessage.setToUser("oppoO6w6c0O4CDYXgDXElhkRi_a8");
+        wxMpTemplateMessage.setTemplateId(templateId_01);
+        wxMpTemplateMessage.setData(dataList);
+
+        // 发送模板消息
+        String msgId = wxMpService.getTemplateMsgService().sendTemplateMsg(wxMpTemplateMessage);
+        log.info("============================access_token: {}, {}", wxMpService.getAccessToken(), msgId);
     }
 
 
