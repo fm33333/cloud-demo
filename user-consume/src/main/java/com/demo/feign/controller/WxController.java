@@ -1,9 +1,7 @@
 package com.demo.feign.controller;
 
-import com.demo.feign.constant.WxAPIConstant;
-import com.demo.feign.data.AccessTokenResponse;
+import com.demo.feign.data.official.TextMessage;
 import com.demo.feign.service.WechatService;
-import com.demo.feign.utils.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 接入微信相关平台，包括企业微信、公众号
@@ -85,5 +81,17 @@ public class WxController {
         return "success";
     }
 
+    /**
+     * 开启内网穿透后，浏览器输入ppx.nat100.top/wx/test可访问此接口
+     *
+     * @return
+     */
+    @GetMapping("/test")
+    public TextMessage test() {
+        TextMessage textMessage = new TextMessage().builder()
+                .content("Hello, world!")
+                .build();
+        return textMessage;
+    }
 
 }

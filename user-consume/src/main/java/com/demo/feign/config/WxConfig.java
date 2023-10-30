@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WxConfig {
 
-    @Value("${official.appid}")
+    @Value("${wx.official.appid}")
     private String appid;
-    @Value("${official.appsecret}")
+    @Value("${wx.official.appsecret}")
     private String appsecret;
-    @Value("${official.token}")
+    @Value("${wx.official.token}")
     private String token;
-    @Value("${official.aeskey}")
+    @Value("${wx.official.aesKey}")
     private String aeskey;
 
     @Bean

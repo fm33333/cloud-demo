@@ -2,7 +2,7 @@ package com.demo.feign.service.impl;
 
 import com.demo.feign.cache.CacheNameEnum;
 import com.demo.feign.cache.CaffeineCacheConfig;
-import com.demo.feign.constant.WxAPIConstant;
+import com.demo.feign.constant.WxConstant;
 import com.demo.feign.data.AccessTokenResponse;
 import com.demo.feign.data.official.TextMessage;
 import com.demo.feign.service.WechatService;
@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +43,10 @@ public class WechatServiceImpl implements WechatService {
 
     @Autowired
     private WxMpService wxMpService;
-    @Value("${official.template_id_01}")
+    @Value("${wx.official.template_id_01}")
     private String templateId_01;
 
+    // wxMpService能自动刷新access_token，不需要自己再去获取了
     @Override
     public String getAccessToken() {
         String appId = wxMpService.getWxMpConfigStorage().getAppId();
@@ -51,10 +54,10 @@ public class WechatServiceImpl implements WechatService {
         // TODO access_token定时刷新
         AccessTokenResponse accessTokenResponse = new AccessTokenResponse();
         if (null == ACCESS_TOKEN_CACHE.getIfPresent(appId)) {
-            String url = WxAPIConstant.OFFICIAL_GET_ACCESS_TOKEN_URL;
+            String url = WxConstant.OFFICIAL_GET_ACCESS_TOKEN_URL;
             Map<String, Object> params = new HashMap<>();
-            params.put(WxAPIConstant.APP_ID, appId);
-            params.put(WxAPIConstant.SECRET, secret);
+            params.put(WxConstant.APP_ID, appId);
+            params.put(WxConstant.SECRET, secret);
             log.info("getAccessToken|params: {}", params);
             accessTokenResponse = HttpUtil.get(url, AccessTokenResponse.class, params).getBody();
             // 放入缓存 TODO 只放access_token
@@ -123,16 +126,24 @@ public class WechatServiceImpl implements WechatService {
 
         // 构建消息体
         List<WxMpTemplateData> dataList = new ArrayList<>();
-        dataList.add(new WxMpTemplateData("name", "fmh")); // name为模板中{{name.DATA}}的name
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("name", "fming");
+        dataMap.put("date", LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        for (Map.Entry<String, String> entry : dataMap.entrySet()) {
+            dataList.add(new WxMpTemplateData(entry.getKey(), entry.getValue()));
+        }
+//        dataList.add(new WxMpTemplateData("name", "fmh")); // name为模板中{{name.DATA}}的name
+//        dataList.add(new WxMpTemplateData("date", ));
 
         WxMpTemplateMessage wxMpTemplateMessage = new WxMpTemplateMessage();
-        wxMpTemplateMessage.setToUser("oppoO6w6c0O4CDYXgDXElhkRi_a8");
-        wxMpTemplateMessage.setTemplateId(templateId_01);
+        wxMpTemplateMessage.setToUser("oppoO6w6c0O4CDYXgDXElhkRi_a8"); // 用户openid
+        wxMpTemplateMessage.setTemplateId(templateId_01); // 模板id
         wxMpTemplateMessage.setData(dataList);
 
         // 发送模板消息
         String msgId = wxMpService.getTemplateMsgService().sendTemplateMsg(wxMpTemplateMessage);
-        log.info("============================access_token: {}, {}", wxMpService.getAccessToken(), msgId);
+//        log.info("============================access_token: {}, {}", wxMpService.getAccessToken(), msgId);
     }
 
 

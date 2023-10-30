@@ -1,7 +1,7 @@
 package com.demo.feign.constant;
 
-public final class WxAPIConstant {
-    private WxAPIConstant() {
+public final class WxConstant {
+    private WxConstant() {
     }
 
     public static final String CORP_ID = "corpid";
@@ -15,7 +15,7 @@ public final class WxAPIConstant {
     // 获取access_token的url
     public static final String CORP_GET_ACCESS_TOKEN_URL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={corpid}&corpsecret={corpsecret}";
 
-    // 应用发送消息的url
+    // 自建应用发送消息到企业微信的url
     public static final String CORP_SEND_MESSAGE_URL = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}";
 
 
