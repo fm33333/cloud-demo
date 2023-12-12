@@ -12,6 +12,8 @@
         <module>eureka-server1</module>
         <module>eureka-server2</module>
         <module>user-consume</module>
+        <module>xxl-job-demo</module>
+        <module>kafka-demo</module>
     </modules>
 
     <packaging>pom</packaging>

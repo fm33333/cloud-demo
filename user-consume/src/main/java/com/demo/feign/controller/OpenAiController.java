@@ -26,6 +26,10 @@ import static com.theokanning.openai.service.OpenAiService.*;
 @RestController
 public class OpenAiController {
 
+    /**
+     * openai的个人密钥（推送到github后会自动失效，需要去官网重新创建）
+     * https://platform.openai.com/account/api-keys
+     */
     @Value("${openai.api-key}")
     private String apiKey;
 

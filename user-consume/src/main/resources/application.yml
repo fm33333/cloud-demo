@@ -43,8 +43,10 @@ wx:
     appsecret: c45139742f0c777cfca78d08099d2a71
     token: 12345abcde # 公众号服务器配置中自己设置的token
     aesKey: Ov7YRpeMh5oIBdpmVg0KtPgnjBvxsnv9vlK359H7pDA # 公众号服务器配置中随机生成的aesKey
+    # 模板消息id
     template_id_02: aP7rBEoXlY6ccSBW2zhYqBy1RWRHiB4mJcAka9mqKJQ
-    template_id_01: 71Bwl8bAezYhDePxtgZ9vx21Y9H_wsSEW7ZsLS2DzuM # 模板消息id
+    template_id_03: 71Bwl8bAezYhDePxtgZ9vx21Y9H_wsSEW7ZsLS2DzuM
+    template_id_01: F8zLX_OI14hdWbpIPESHFN7_VCbTuBzoWBJivuxQK0U
 
 openai:
-  api-key: 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 #
+  api-key: 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 # 推送至github即失效

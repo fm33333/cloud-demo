@@ -5,6 +5,7 @@ import com.demo.feign.clients.UserClient;
 import com.demo.feign.config.DynamicFeignClientFactory;
 import com.demo.feign.data.User;
 import com.demo.feign.data.UserDTO;
+import com.demo.feign.data.official.TextMessage;
 import com.demo.feign.utils.CacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UserController {
         log.info("test|serverName: {}, uri: {}, id: {}", serverName, uri, id);
         try {
             UserClient userClient = CacheUtil.getUserClient(feignClientFactory
-                    , serverName, uri.toString());
+                    , serverName, uri);
             log.info("test|userClient: {}", userClient.toString());
 
             return userClient.test(id);
@@ -41,7 +42,7 @@ public class UserController {
         log.info("test|serverName: {}, uri: {}, id: {}", serverName, uri, id);
         try {
             UserClient userClient = CacheUtil.getUserClient(feignClientFactory
-                    , serverName, uri.toString());
+                    , serverName, uri);
             log.info("test|userClient: {}", userClient.toString());
 
             return userClient.testParam(id);

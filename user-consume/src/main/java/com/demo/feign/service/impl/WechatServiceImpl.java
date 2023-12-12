@@ -134,10 +134,10 @@ public class WechatServiceImpl implements WechatService {
             dataList.add(new WxMpTemplateData(entry.getKey(), entry.getValue()));
         }
 //        dataList.add(new WxMpTemplateData("name", "fmh")); // name为模板中{{name.DATA}}的name
-//        dataList.add(new WxMpTemplateData("date", ));
 
         WxMpTemplateMessage wxMpTemplateMessage = new WxMpTemplateMessage();
         wxMpTemplateMessage.setToUser("oppoO6w6c0O4CDYXgDXElhkRi_a8"); // 用户openid
+//        wxMpTemplateMessage.setToUser("oppoO6-U2YH9KPzy68JHTei_rhmg");
         wxMpTemplateMessage.setTemplateId(templateId_01); // 模板id
         wxMpTemplateMessage.setData(dataList);
 

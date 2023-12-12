@@ -1,0 +1,24 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: xxl-job-demo
+
+
+eureka:
+  client:
+    service-url: # eureka的地址信息
+      defaultZone: http://localhost:7001/eureka/,http://localhost:7002/eureka/
+
+xxl:
+  job:
+    accessToken: default_token
+    admin:
+      addresses: http://192.168.253.129:8080/xxl-job-admin # 调度中心地址（虚拟机中docker启动）
+    executor:
+      appname: xxl-job-executor-sample # 执行器名称，与调度中心的执行器管理中一致
+      port: 9999 # 执行器端口，自己设置
+
+
+
+server.name:

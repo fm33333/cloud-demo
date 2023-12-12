@@ -77,7 +77,6 @@ public class WxController {
         } catch (WxErrorException e) {
             throw new RuntimeException(e);
         }
-
         return "success";
     }
 
@@ -88,7 +87,8 @@ public class WxController {
      */
     @GetMapping("/test")
     public TextMessage test() {
-        TextMessage textMessage = new TextMessage().builder()
+        TextMessage textMessage = new TextMessage()
+                .builder()
                 .content("Hello, world!")
                 .build();
         return textMessage;
