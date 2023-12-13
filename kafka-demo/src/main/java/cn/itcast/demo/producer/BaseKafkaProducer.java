@@ -11,7 +11,6 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import static cn.itcast.demo.constant.KafkaConstant.*;
 
-@Deprecated
 @Slf4j
 @Component
 public class BaseKafkaProducer {

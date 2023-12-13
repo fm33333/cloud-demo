@@ -27,6 +27,7 @@ public class TestKafkaProducer implements ProducerListener<Object, Object> {
     /**
      * 推送消息
      * 根据判断RecordMetadata是否有值来确认消息是否发送成功
+     * TODO：同步异步分成2个方法 or 加一个参数判断是否同步
      *
      * @param msg
      */
@@ -34,7 +35,7 @@ public class TestKafkaProducer implements ProducerListener<Object, Object> {
         log.info("msg: {}", msg);
         String key = Uuid.randomUuid().toString();
         ProducerRecord<String, String> kafkaMessage = new ProducerRecord<>(KafkaConstant.DEFAULT_TOPIC, key, msg);
-        // 同步发送方式：生产者调用 send() 方法后，会等待消息的确认返回，如果发送成功，send() 方法会返回一个 RecordMetadata 对象，其中包含了消息的元数据信息；如果发送失败，则可能抛出异常
+        // 同步发送方式：有序发送消息，生产者调用 send() 方法后，会等待消息的确认返回，如果发送成功，send() 方法会返回一个 RecordMetadata 对象，其中包含了消息的元数据信息；如果发送失败，则可能抛出异常
         /*try {
             Future<RecordMetadata> metadataFuture = kafkaProducer.send(kafkaMessage);
             // 消息发送成功才有RecordMetadata值
@@ -45,7 +46,7 @@ public class TestKafkaProducer implements ProducerListener<Object, Object> {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }*/
-        // 异步发送方式：生产者调用 send() 方法后，可以传递一个回调函数，在消息发送完成后，会调用该回调函数，通过回调函数可以获取到发送结果
+        // 异步发送方式：无序发送消息，生产者调用 send() 方法后，可以传递一个回调函数，在消息发送完成后，会调用该回调函数，通过回调函数可以获取到发送结果
         kafkaProducer.send(kafkaMessage, new Callback() {
             @Override
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {

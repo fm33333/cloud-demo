@@ -1,0 +1,43 @@
+package cn.itcast.demo.consumer;
+
+import cn.itcast.demo.constant.KafkaConstant;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.PartitionOffset;
+import org.springframework.kafka.annotation.TopicPartition;
+
+import java.util.Optional;
+
+/**
+ * 使用@KafkaListener注解实现的消费者
+ */
+@Configuration
+public class KafkaListenerConsumer {
+
+    @KafkaListener(topics = KafkaConstant.DEFAULT_TOPIC, groupId = KafkaConstant.GROUP_ID_0)
+    public void consume1_1(ConsumerRecord<String, Object> record) {
+        Optional<Object> value = Optional.ofNullable(record.value());
+        System.out.println("consume1.1收到topic.1的消息：" + record.key() + " - " + record.partition() + " - " + record.value());
+    }
+
+    @KafkaListener(topics = KafkaConstant.DEFAULT_TOPIC, groupId = KafkaConstant.GROUP_ID_1)
+    public void consume1_2(ConsumerRecord<String, Object> record) {
+        Optional<Object> value = Optional.ofNullable(record.value());
+        System.out.println("consume1.2收到topic.1的消息：" + record.key() + " - " + record.partition() + " - " + record.value());
+    }
+
+    /*@KafkaListener(groupId = KafkaConstant.GROUP_ID_2, topicPartitions = {
+            @TopicPartition(topic = KafkaConstant.COLOR_TOPIC,
+            partitionOffsets = @PartitionOffset(partition = "0", initialOffset = "10"))
+    })*/
+    @KafkaListener(groupId = KafkaConstant.GROUP_ID_2, topicPartitions = {
+            @TopicPartition(topic = KafkaConstant.COLOR_TOPIC,
+                    partitions = "0")
+    })
+    public void consume2(ConsumerRecord<String, Object> record) {
+        Optional<Object> value = Optional.ofNullable(record.value());
+        System.out.println("consume2收到color的消息：" + record.key() + " - " + record.partition() + " - " + record.value());
+    }
+
+}

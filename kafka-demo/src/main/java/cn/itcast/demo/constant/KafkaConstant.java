@@ -7,5 +7,6 @@ public class KafkaConstant {
 
     public static final String GROUP_ID_0 = "kafka-test-0";
     public static final String GROUP_ID_1 = "kafka-test-1";
+    public static final String GROUP_ID_2 = "kafka-test-2";
 
 }

@@ -1,10 +1,11 @@
 package cn.itcast.demo.config;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,6 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.ProducerListener;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -32,6 +32,7 @@ public class KafkaConfig {
     private String keySerializer;
     @Value("${spring.kafka.producer.value-serializer}")
     private String valueSerializer;
+
 
     /**
      * kafka生产者工厂
@@ -57,13 +58,16 @@ public class KafkaConfig {
         props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 30 * 1000);
         props.put(ProducerConfig.RETRIES_CONFIG, 5);
         props.put(ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG, 3000);
+        // 自定义分区器
+        // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "cn.itcast.demo.config.MyPartitioner");
         return props;
     }
 
     /**
      * kafka生产者模板
+     * spring kafka提供的KafkaTemplate，其内部封装了KafkaProducer
      *
-     * @return
+     * @return KafkaTemplate
      */
     @Bean
     public KafkaTemplate<String, Object> kafkaTemplate() {
@@ -87,10 +91,21 @@ public class KafkaConfig {
     }
 
     /**
-     * @return
+     * kafka生产者
+     *
+     * @return KafkaProducer
      */
     @Bean
     public KafkaProducer<String, String> kafkaProducer() {
         return new KafkaProducer<>(producerConfigs());
     }
+
+
+    /**
+     * kafka消费者配置
+     *
+     * @return
+     */
+
+
 }

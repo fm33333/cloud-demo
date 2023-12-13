@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class KafkaProducerController {
 
-    @Deprecated
     @Autowired
     BaseKafkaProducer baseKafkaProducer;
 
