@@ -1,6 +1,5 @@
 package cn.itcast.demo.consumer;
 
-import cn.itcast.demo.constant.KafkaConstant;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -9,21 +8,20 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaListener;
 
+import java.time.Duration;
 import java.util.*;
 
 /**
- * Kafka消费者
- * TODO：参考common-kafka中的动态设置topics等属性
+ * Kafka消费者（非@KafkaListener）
  * 不设置groupId，则默认使用配置文件中配的group-id
  * tips：
- *      1、同一个topic下，若消费者属于同一group，则会负载消费；否则每个消费者都会消费消息
- *      2、同一个topic下的一个partition只能被group中的一个消费者消费，若group中消费者数量超过了topic中partition的数量，那么多余的消费者会被闲置
+ * 1、同一个topic下，若消费者属于同一group，则会负载消费；否则每个消费者都会消费消息
+ * 2、同一个topic下的一个partition只能被group中的一个消费者消费，若group中消费者数量超过了topic中partition的数量，那么多余的消费者会被闲置
  */
 @Slf4j
 @Getter
-public class BaseKafkaConsumer {
+public class KafkaConsumerHandler {
 
     /**
      * KafkaConsumer
@@ -49,11 +47,11 @@ public class BaseKafkaConsumer {
      * @param groupId
      * @return
      */
-    public static BaseKafkaConsumer build(String topic, String groupId) {
-        return new BaseKafkaConsumer(topic, groupId);
+    public static KafkaConsumerHandler build(String topic, String groupId) {
+        return new KafkaConsumerHandler(topic, groupId);
     }
 
-    public BaseKafkaConsumer(String topic, String groupId) {
+    public KafkaConsumerHandler(String topic, String groupId) {
         log.info("Building Kafka Consumer...");
         this.setConsumer(groupId);
         log.info("after setConsumer: {}", this.kafkaConsumer);
@@ -82,7 +80,7 @@ public class BaseKafkaConsumer {
      * @param groupId
      * @return
      */
-    public BaseKafkaConsumer setConsumer(String groupId) {
+    public KafkaConsumerHandler setConsumer(String groupId) {
         Properties properties = this.consumerConfigs();
         // 设置groupId
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -97,7 +95,7 @@ public class BaseKafkaConsumer {
      * @param topic
      * @return
      */
-    public BaseKafkaConsumer setTopic(String topic) {
+    public KafkaConsumerHandler setTopic(String topic) {
         kafkaConsumer.unsubscribe();
         this.kafkaConsumer.subscribe(Arrays.asList(topic));
         this.topic = topic;
@@ -114,8 +112,9 @@ public class BaseKafkaConsumer {
     public List<String> consume(Integer timeout) {
         List<String> messages = new ArrayList<>();
         try {
-            // 两次poll之间的时长（处理消费数据的总耗时）不得超过session.timeout.ms(默认5min)，否则会触发kafka的负载均衡，导致一定时间内无法从kafka服务端拉取数据
-            ConsumerRecords<String, String> records = this.kafkaConsumer.poll(Optional.ofNullable(timeout).orElse(100));
+            // 注意：两次poll之间的时长不得超过session.timeout.ms=45s(?)（处理消费数据的总耗时不得超过max.poll.interval.ms=5min），否则会触发kafka的负载均衡，导致一定时间内无法从kafka服务端拉取数据
+//            ConsumerRecords<String, String> records = this.kafkaConsumer.poll(Optional.ofNullable(timeout).orElse(100));
+            ConsumerRecords<String, String> records = this.kafkaConsumer.poll(Duration.ofMillis(Optional.ofNullable(timeout).orElse(100)));
             for (ConsumerRecord<String, String> record : records) {
                 log.info(">>>>record: {}", record);
                 // topic是否一致
@@ -141,7 +140,7 @@ public class BaseKafkaConsumer {
     /**
      * 唤醒消费者
      */
-    public BaseKafkaConsumer wakeup() {
+    public KafkaConsumerHandler wakeup() {
         this.kafkaConsumer.wakeup();
         return this;
     }

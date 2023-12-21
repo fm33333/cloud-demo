@@ -1,5 +1,8 @@
 package cn.itcast.demo.constant;
 
+/**
+ * 常量类
+ */
 public class KafkaConstant {
 
     public static final String DEFAULT_TOPIC = "topic.1";

@@ -23,6 +23,9 @@ public class MyPartitioner implements Partitioner {
      */
     @Override
     public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
+        if (value.toString().contains("aaa")) {
+            return 1;
+        }
         return 0;
     }
 

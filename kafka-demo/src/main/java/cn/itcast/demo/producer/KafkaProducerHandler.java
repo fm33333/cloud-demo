@@ -11,15 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.support.ProducerListener;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 /**
  * Kafka producer（使用KafkaProducer推送消息）
  */
 @Slf4j
 @Component
-public class TestKafkaProducer implements ProducerListener<Object, Object> {
+public class KafkaProducerHandler implements ProducerListener<Object, Object> {
 
     @Autowired
     KafkaProducer<String, String> kafkaProducer;
@@ -69,6 +66,12 @@ public class TestKafkaProducer implements ProducerListener<Object, Object> {
      */
     public void produce(String topic, String key, String msg) {
         log.info("topic: {}, key: {}, msg: {}", topic, key, msg);
+        if (topic == null || topic.isEmpty()) {
+            topic = KafkaConstant.DEFAULT_TOPIC;
+        }
+        if (key == null || key.isEmpty()) {
+            key = Uuid.randomUuid().toString();
+        }
         ProducerRecord<String, String> kafkaMessage = new ProducerRecord<>(topic, key, msg);
         // 异步发送方式：生产者调用 send() 方法后，可以传递一个回调函数，在消息发送完成后，会调用该回调函数，通过回调函数可以获取到发送结果
         kafkaProducer.send(kafkaMessage, new Callback() {
