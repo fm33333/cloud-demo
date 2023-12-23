@@ -60,6 +60,8 @@ public class KafkaConfig {
         props.put(ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG, 3000);
         // 自定义分区器
         // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "cn.itcast.demo.config.MyPartitioner");
+        // 幂等校验（默认true）
+        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         return props;
     }
 
@@ -72,7 +74,7 @@ public class KafkaConfig {
     @Bean
     public KafkaTemplate<String, Object> kafkaTemplate() {
         KafkaTemplate<String, Object> kafkaTemplate = new KafkaTemplate<>(producerFactory());
-        // 设置监听器
+        // 设置监听器（监听消息是否发送成功）
         kafkaTemplate.setProducerListener(new ProducerListener<String, Object>() {
             @Override
             public void onSuccess(ProducerRecord<String, Object> producerRecord, RecordMetadata recordMetadata) {

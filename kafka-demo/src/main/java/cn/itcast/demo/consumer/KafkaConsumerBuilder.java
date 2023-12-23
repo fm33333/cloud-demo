@@ -1,5 +1,6 @@
 package cn.itcast.demo.consumer;
 
+import cn.itcast.demo.constant.KafkaConstant;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -7,35 +8,23 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 import java.util.*;
 
+
 /**
- * Kafka消费者（非@KafkaListener）
- * 不设置groupId，则默认使用配置文件中配的group-id
+ * Kafka消费者 构造类（非@KafkaListener，运行时构建，方便其他服务来调用）
+ * 若未指定groupId，则默认使用配置文件中配的group-id
  * tips：
  * 1、同一个topic下，若消费者属于同一group，则会负载消费；否则每个消费者都会消费消息
  * 2、同一个topic下的一个partition只能被group中的一个消费者消费，若group中消费者数量超过了topic中partition的数量，那么多余的消费者会被闲置
  */
 @Slf4j
 @Getter
-public class KafkaConsumerHandler {
+public class KafkaConsumerBuilder {
 
-    /**
-     * KafkaConsumer
-     */
-
-    // 集群节点
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServers;
-    // key和value的反序列化
-    @Value("${spring.kafka.consumer.key-deserializer}")
-    private String keyDeserializer;
-    @Value("${spring.kafka.consumer.value-deserializer}")
-    private String valueDeserializer;
-
+    //Kafka消费者
     private KafkaConsumer<String, String> kafkaConsumer;
     // 主题
     private String topic;
@@ -47,15 +36,16 @@ public class KafkaConsumerHandler {
      * @param groupId
      * @return
      */
-    public static KafkaConsumerHandler build(String topic, String groupId) {
-        return new KafkaConsumerHandler(topic, groupId);
+    public static KafkaConsumerBuilder build(String topic, String groupId) {
+        return new KafkaConsumerBuilder(topic, groupId);
     }
 
-    public KafkaConsumerHandler(String topic, String groupId) {
-        log.info("Building Kafka Consumer...");
+    public KafkaConsumerBuilder(String topic, String groupId) {
+        log.info("Building Kafka Consumer...topic={}, groupId={}", topic, groupId);
         this.setConsumer(groupId);
         log.info("after setConsumer: {}", this.kafkaConsumer);
         this.setTopic(topic);
+        log.info("after setTopic: {}", this.topic);
     }
 
     /**
@@ -65,12 +55,15 @@ public class KafkaConsumerHandler {
      */
     public Properties consumerConfigs() {
         Properties props = new Properties();
-        /*props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, keyDeserializer);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializer);*/
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.253.129:19092,192.168.253.129:29092,192.168.253.129:39092");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+        // TODO: 此处固定了bootstrapServers，实际应该传参
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstant.BOOTSTRAP_SERVERS);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaConstant.STRING_DESERIALIZER);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaConstant.STRING_DESERIALIZER);
+        // 是否自动提交offset
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        // 提交offset的时间间隔
+        // props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 5000);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         return props;
     }
 
@@ -80,12 +73,11 @@ public class KafkaConsumerHandler {
      * @param groupId
      * @return
      */
-    public KafkaConsumerHandler setConsumer(String groupId) {
-        Properties properties = this.consumerConfigs();
+    public KafkaConsumerBuilder setConsumer(String groupId) {
+        Properties props = this.consumerConfigs();
         // 设置groupId
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        log.info("properties: {}", properties.toString());
-        this.kafkaConsumer = new KafkaConsumer<>(properties);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        this.kafkaConsumer = new KafkaConsumer<>(props);
         return this;
     }
 
@@ -95,10 +87,10 @@ public class KafkaConsumerHandler {
      * @param topic
      * @return
      */
-    public KafkaConsumerHandler setTopic(String topic) {
+    public KafkaConsumerBuilder setTopic(String topic) {
+        this.topic = topic;
         kafkaConsumer.unsubscribe();
         this.kafkaConsumer.subscribe(Arrays.asList(topic));
-        this.topic = topic;
         return this;
     }
 
@@ -131,6 +123,13 @@ public class KafkaConsumerHandler {
     }
 
     /**
+     * 手动同步提交offset
+     */
+    public void commitSync() {
+        this.kafkaConsumer.commitSync();
+    }
+
+    /**
      * 关闭消费者
      */
     public void close() {
@@ -140,7 +139,7 @@ public class KafkaConsumerHandler {
     /**
      * 唤醒消费者
      */
-    public KafkaConsumerHandler wakeup() {
+    public KafkaConsumerBuilder wakeup() {
         this.kafkaConsumer.wakeup();
         return this;
     }

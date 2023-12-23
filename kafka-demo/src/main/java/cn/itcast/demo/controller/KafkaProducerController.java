@@ -1,5 +1,7 @@
 package cn.itcast.demo.controller;
 
+import cn.itcast.demo.consumer.KafkaConsumerBuilder;
+import cn.itcast.demo.producer.KafkaProducerBuilder;
 import cn.itcast.demo.producer.KafkaTemplateHandler;
 import cn.itcast.demo.producer.KafkaProducerHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ public class KafkaProducerController {
 
     @Autowired
     KafkaProducerHandler kafkaProducerHandler;
+
+    /**     KafkaTemplate      */
 
     /**
      * 同步推送消息（KafkaTemplate）
@@ -43,32 +47,8 @@ public class KafkaProducerController {
         return "ok";
     }
 
-    /**
-     * 异步推送消息（KafkaProducer）
-     *
-     * @param msg
-     * @return
-     */
-    @Deprecated
-    @PostMapping("/testKafkaProducer")
-    public String testKafkaProducer(@RequestParam String msg) {
-        kafkaProducerHandler.produce(msg);
-        return "ok";
-    }
 
-    /**
-     * 异步推送消息（KafkaProducer）
-     *
-     * @param topic
-     * @param msg
-     * @return
-     */
-    @Deprecated
-    @PostMapping("/produceWithTopicValue")
-    public String produceWithTopicKeyValue(@RequestParam String topic, @RequestParam String msg) {
-        kafkaProducerHandler.produce(topic, msg);
-        return "ok";
-    }
+    /**    KafkaProducer    */
 
     /**
      * 异步推送消息（KafkaProducer）
@@ -78,11 +58,26 @@ public class KafkaProducerController {
      * @param msg
      * @return
      */
-    @PostMapping("/produceWithTopicKeyValue")
-    public String produceWithTopicKeyValue(@RequestParam(required = false) String topic, @RequestParam(required = false) String key, @RequestParam String msg) {
+    @PostMapping("/produceByKafkaProducer")
+    public String produceByKafkaProducer(@RequestParam(required = false) String topic, @RequestParam(required = false) String key, @RequestParam String msg) {
         kafkaProducerHandler.produce(topic, key, msg);
         return "ok";
     }
 
+    /**
+     * 异步推送消息（KafkaProducerBuilder）
+     *
+     * @param topic
+     * @param key
+     * @param msg
+     * @return
+     */
+    @PostMapping("/produceByKafkaProducerBuilder")
+    public String produceByKafkaProducerBuilder(@RequestParam(required = false) String topic, @RequestParam(required = false) String key, @RequestParam String msg) {
+        // TODO: 缓存producerBuilder
+        KafkaProducerBuilder producerBuilder = KafkaProducerBuilder.build("");
+        producerBuilder.produce(topic, key, msg);
+        return "ok";
+    }
 
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 @Configuration
 public class KafkaListenerHandler {
 
-    @KafkaListener(topics = KafkaConstant.DEFAULT_TOPIC, groupId = KafkaConstant.GROUP_ID_0)
+    /*@KafkaListener(topics = KafkaConstant.DEFAULT_TOPIC, groupId = KafkaConstant.GROUP_ID_0)
     public void consume1_1(ConsumerRecord<String, Object> record) {
         Optional<Object> value = Optional.ofNullable(record.value());
         log.info("consume1.1收到topic.1的消息：{} - {} - {}", record.key(), record.partition(), value);
@@ -28,10 +28,10 @@ public class KafkaListenerHandler {
         log.info("consume1.2收到topic.1的消息：{} - {} - {}", record.key(), record.partition(), value);
     }
 
-    /*@KafkaListener(groupId = KafkaConstant.GROUP_ID_2, topicPartitions = {
+    *//*@KafkaListener(groupId = KafkaConstant.GROUP_ID_2, topicPartitions = {
             @TopicPartition(topic = KafkaConstant.COLOR_TOPIC,
             partitionOffsets = @PartitionOffset(partition = "0", initialOffset = "10"))
-    })*/
+    })*//*
     @KafkaListener(groupId = KafkaConstant.GROUP_ID_2, topicPartitions = {
             @TopicPartition(topic = KafkaConstant.COLOR_TOPIC,
                     partitions = "0")
@@ -39,6 +39,6 @@ public class KafkaListenerHandler {
     public void consume2(ConsumerRecord<String, Object> record) {
         Optional<Object> value = Optional.ofNullable(record.value());
         log.info("consume2收到color的消息：{} - {} - {}", record.key(), record.partition(), value);
-    }
+    }*/
 
 }

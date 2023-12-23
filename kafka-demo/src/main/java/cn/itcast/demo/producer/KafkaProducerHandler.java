@@ -12,7 +12,8 @@ import org.springframework.kafka.support.ProducerListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Kafka producer（使用KafkaProducer推送消息）
+ * Kafka producer（使用KafkaProducer推送消息，配置类构建Bean）
+ * TODO：与KafkaConsumer的构建方式不同，应统一成一种方式
  */
 @Slf4j
 @Component
