@@ -30,21 +30,7 @@ public class KafkaConsumerController {
         log.info("kafkaConsumer开始消费==== topic: {}, groupId: {}", topic, groupId);
         // 选择这样动态创建而不是在配置类中构建Bean的原因：此模块放入标准化组件时，其他服务调用时也可以使用这种传参方式创建
         KafkaConsumerBuilder consumerBuilder = KafkaConsumerBuilder.build(topic, groupId);
-        try {
-            while (true) {
-                // 拉取消息，间隔xxx ms
-                List<String> messages = consumerBuilder.consume(100);
-                if (!messages.isEmpty()) {
-                    log.info("KafkaConsumer [{}] 消费成功>>>> topic: {}, messages: {}", groupId, consumerBuilder.getTopic(), messages);
-                }
-                // 手动提交offset
-                consumerBuilder.commitSync();
-            }
-        } catch (Exception e) {
-            log.error("消费异常|exception: {}", e.getMessage(), e);
-        } finally {
-            consumerBuilder.close();
-        }
+        consumerBuilder.consume();
     }
 
     @GetMapping("/wakeup")

@@ -59,7 +59,9 @@ public class KafkaProducerController {
      * @return
      */
     @PostMapping("/produceByKafkaProducer")
-    public String produceByKafkaProducer(@RequestParam(required = false) String topic, @RequestParam(required = false) String key, @RequestParam String msg) {
+    public String produceByKafkaProducer(@RequestParam(required = false) String topic,
+                                         @RequestParam(required = false) String key,
+                                         @RequestParam String msg) {
         kafkaProducerHandler.produce(topic, key, msg);
         return "ok";
     }
@@ -73,7 +75,9 @@ public class KafkaProducerController {
      * @return
      */
     @PostMapping("/produceByKafkaProducerBuilder")
-    public String produceByKafkaProducerBuilder(@RequestParam(required = false) String topic, @RequestParam(required = false) String key, @RequestParam String msg) {
+    public String produceByKafkaProducerBuilder(@RequestParam(required = false) String topic,
+                                                @RequestParam(required = false) String key,
+                                                @RequestParam String msg) {
         // TODO: 缓存producerBuilder
         KafkaProducerBuilder producerBuilder = KafkaProducerBuilder.build("");
         producerBuilder.produce(topic, key, msg);

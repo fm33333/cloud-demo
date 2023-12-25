@@ -28,6 +28,8 @@ public class KafkaConsumerBuilder {
     private KafkaConsumer<String, String> kafkaConsumer;
     // 主题
     private String topic;
+    // 分组id
+    private String groupId;
 
     /**
      * 构建Kafka消费者
@@ -77,6 +79,7 @@ public class KafkaConsumerBuilder {
         Properties props = this.consumerConfigs();
         // 设置groupId
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        this.groupId = groupId;
         this.kafkaConsumer = new KafkaConsumer<>(props);
         return this;
     }
@@ -94,6 +97,26 @@ public class KafkaConsumerBuilder {
         return this;
     }
 
+    /**
+     * 消费消息
+     */
+    public void consume() {
+        try {
+            while (true) {
+                // 拉取消息，间隔xxx ms
+                List<String> messages = this.consume(100);
+                if (!messages.isEmpty()) {
+                    log.info("KafkaConsumer [{}] 消费成功>>>> topic: {}, messages: {}", this.groupId, this.getTopic(), messages);
+                }
+                // 手动提交offset
+                this.commitSync();
+            }
+        } catch (Exception e) {
+            log.error("消费异常|exception: {}", e.getMessage(), e);
+        } finally {
+            this.close();
+        }
+    }
 
     /**
      * 消费消息（需要无限循环调用）
